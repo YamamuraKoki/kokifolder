@@ -51,10 +51,10 @@ public class CalcurateSystem {
 			String [] rcdFilterFile = filterFile[i].split("\\.", -1);
 
 			//rcdファイル名の数値を文字列→数値に変更//
-			int j = Integer.parseInt(rcdFilterFile[0]);
+			int rcdFileInteger = Integer.parseInt(rcdFilterFile[0]);
 			//連番でない場合エラーを表示する//
-			int k = j-i;
-			if(k != 1){
+			int rcdFileDifferent = rcdFileInteger-i;
+			if(rcdFileDifferent != 1){
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
 			}
