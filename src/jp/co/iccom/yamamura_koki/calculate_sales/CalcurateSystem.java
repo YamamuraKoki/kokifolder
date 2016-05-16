@@ -49,7 +49,6 @@ public class CalcurateSystem {
 		for(int i=0; i < filterFile.length; i++){
 			//rcdファイル名を数字と拡張子に分割//
 			String [] rcdFilterFile = filterFile[i].split("\\.", -1);
-
 			//rcdファイル名の数値を文字列→数値に変更//
 			int rcdFileChangeNumber = Integer.parseInt(rcdFilterFile[0]);
 			//連番でない場合エラーを表示する//
@@ -111,14 +110,14 @@ public class CalcurateSystem {
 		PrintWriter pw = new PrintWriter(bw);
 		//並び替え//
 		try{
-			List<Map.Entry<String,Long>> sc = new ArrayList<Map.Entry<String,Long>>(Value.entrySet());
-			Collections.sort(sc, new Comparator<Map.Entry<String,Long>>() {
+			List<Map.Entry<String,Long>> calcurateSort = new ArrayList<Map.Entry<String,Long>>(Value.entrySet());
+			Collections.sort(calcurateSort, new Comparator<Map.Entry<String,Long>>() {
 				public int compare(Entry<String,Long> entry1, Entry<String,Long> entry2) {
 					return ((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
 				}
 			});
-			for (Entry<String,Long> cr : sc) {
-				pw.println(cr.getKey() + "," + code.get(cr.getKey()) + ","+ cr.getValue());
+			for (Entry<String,Long> calcurateSortResult : calcurateSort) {
+				pw.println(calcurateSortResult.getKey() + "," + code.get(calcurateSortResult.getKey()) + ","+ calcurateSortResult.getValue());
 			}
 		}
 		finally{
