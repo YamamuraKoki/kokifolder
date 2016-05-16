@@ -115,7 +115,7 @@ public class CalcurateSystem {
 			}
 			return true;
 
-		}catch(IOException e){
+		} catch(IOException e) {
 			System.out.println(fName + "定義ファイルが存在しません");
 			return false;
 		}
