@@ -20,10 +20,10 @@ public class CalcurateSystem {
 	private static ArrayList<String> rcdFile;
 
 	public static void main(String[] args) throws IOException {
-		HashMap<String, String> branch = new HashMap<String, String>();
-		HashMap<String, String> commodity = new HashMap<String, String>();
-		HashMap<String, Long> branchValue = new HashMap<String, Long>();
-		HashMap<String, Long> commodityValue = new HashMap<String, Long>();
+		HashMap<String, String> branches = new HashMap<String, String>();
+		HashMap<String, String> commodities = new HashMap<String, String>();
+		HashMap<String, Long> branchValueResult = new HashMap<String, Long>();
+		HashMap<String, Long> commodityValueResult = new HashMap<String, Long>();
 
 		if(args.length != 1){
 			System.out.println("予期せぬエラーが発生しました");
@@ -31,12 +31,12 @@ public class CalcurateSystem {
 		}
 
 		//支店定義ファイルの読み込み//
-		if(!fileRead(args[0], "branch.lst", branch, branchValue, "支店", "^\\d{3}$")){
+		if(!fileRead(args[0], "branch.lst", branches, branchValueResult, "支店", "^\\d{3}$")){
 			return;
 		}
 
 		//商品定義ファイルの読み込み//
-		if(!fileRead(args[0], "commodity.lst", commodity, commodityValue, "商品", "^\\w{8}$")){
+		if(!fileRead(args[0], "commodity.lst", commodities, commodityValueResult, "商品", "^\\w{8}$")){
 			return;
 		}
 
@@ -51,9 +51,9 @@ public class CalcurateSystem {
 			String [] rcdFilterFile = filterFile[i].split("\\.", -1);
 
 			//rcdファイル名の数値を文字列→数値に変更//
-			int rcdFileInteger = Integer.parseInt(rcdFilterFile[0]);
+			int rcdFileChangeNumber = Integer.parseInt(rcdFilterFile[0]);
 			//連番でない場合エラーを表示する//
-			int rcdFileDifferent = rcdFileInteger-i;
+			int rcdFileDifferent = rcdFileChangeNumber-i;
 			if(rcdFileDifferent != 1){
 				System.out.println("売上ファイル名が連番になっていません");
 				return;
@@ -61,17 +61,17 @@ public class CalcurateSystem {
 
 			//売上ファイルの呼び出し//
 			try{
-				if(!rcdFileRead(args[0], filterFile[i], rcdFilterFile[0], branch, commodity, 0, 1)){
+				if(!rcdFileRead(args[0], filterFile[i], rcdFilterFile[0], branches, commodities, 0, 1)){
 					return;
 				}
 
 				//支店別合計の計算//
-				if(!fileCalcurate(branchValue, rcdFile, 0, 2)){
+				if(!fileCalcurate(branchValueResult, rcdFile, 0, 2)){
 					return;
 				}
 
 				//商品別売上の計算//
-				if(!fileCalcurate(commodityValue, rcdFile, 1, 2)){
+				if(!fileCalcurate(commodityValueResult, rcdFile, 1, 2)){
 					return;
 				}
 			}
@@ -82,17 +82,18 @@ public class CalcurateSystem {
 		}
 
 		//売上集計ファイルの作成//
-		if(!fileWrite(args[0], "branch.out", branchValue, branch)){
+		if(!fileWrite(args[0], "branch.out", branchValueResult, branches)){
 			return;
 		}
 
-		if(!fileWrite(args[0], "commodity.out", commodityValue, commodity)){
+		if(!fileWrite(args[0], "commodity.out", commodityValueResult, commodities)){
 			return;
 		}
 	}
 
 	//売上集計書き込みのメソッド//
-	private static boolean fileWrite(String path, String fileName, HashMap<String, Long> Value, HashMap<String, String> code) {
+	private static boolean fileWrite(String path, String fileName, HashMap<String, Long> Value,
+			HashMap<String, String> code) {
 		//新規作成//
 		File MakeFile = new File(path + File.separator + fileName);
 
@@ -128,7 +129,8 @@ public class CalcurateSystem {
 	}
 
 	//定義ファイル読み込みのメソッド//
-	private static boolean fileRead(String path, String fileName, HashMap<String, String> mapname, HashMap<String, Long> valueName, String fName, String match){
+	private static boolean fileRead(String path, String fileName, HashMap<String, String> mapname,
+			HashMap<String, Long> valueName, String fName, String match){
 		try{
 			BufferedReader read = new BufferedReader(new FileReader(path + File.separator + fileName));
 			try{
@@ -162,7 +164,8 @@ public class CalcurateSystem {
 	}
 
 	//売上金額合計のメソッド//
-	private static boolean fileCalcurate(HashMap<String, Long> valueName, ArrayList<String> fileName, int codeName, int salesA){
+	private static boolean fileCalcurate(HashMap<String, Long> valueName, ArrayList<String> fileName,
+			int codeName, int salesA){
 		//元々入ってる金額//
 		Long amount = valueName.get(fileName.get(codeName));
 		//売上//
@@ -180,7 +183,8 @@ public class CalcurateSystem {
 		return true;
 	}
 	//売上ファイル読み込み//
-	private static boolean rcdFileRead(String path, String filterFile, String splitName, HashMap<String, String> bName, HashMap<String, String> cName,  int branchCode , int commodityCode){
+	private static boolean rcdFileRead(String path, String filterFile, String splitName, HashMap<String, String> bName,
+			HashMap<String, String> cName,  int branchCode , int commodityCode){
 		BufferedReader rcdRead = null;
 		try{
 			rcdRead = new BufferedReader(new FileReader(path + File.separator + filterFile));
