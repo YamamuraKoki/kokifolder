@@ -73,8 +73,7 @@ public class CalcurateSystem {
 				if(!fileCalcurate(commodityValueResult, rcdFile, 1, 2)){
 					return;
 				}
-			}
-			catch(NumberFormatException e){
+			}catch(NumberFormatException e){
 				System.out.println("予期せぬエラーが発生しました");
 				return;
 			}
@@ -92,7 +91,7 @@ public class CalcurateSystem {
 
 	//売上集計書き込みのメソッド//
 	private static boolean fileWrite(String path, String fileName, HashMap<String, Long> Value,
-			HashMap<String, String> code) {
+			HashMap<String, String> code){
 		//新規作成//
 		File MakeFile = new File(path + File.separator + fileName);
 
@@ -101,8 +100,7 @@ public class CalcurateSystem {
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(Write);
-		}
-		catch (IOException e) {
+		}catch (IOException e){
 			System.out.println("予期せぬエラーが発生しました");
 			return false;
 		}
@@ -113,14 +111,13 @@ public class CalcurateSystem {
 			List<Map.Entry<String,Long>> calcurateSort = new ArrayList<Map.Entry<String,Long>>(Value.entrySet());
 			Collections.sort(calcurateSort, new Comparator<Map.Entry<String,Long>>() {
 				public int compare(Entry<String,Long> entry1, Entry<String,Long> entry2) {
-					return ((Long)entry2.getValue()).compareTo((Long)entry1.getValue());
+					return (entry2.getValue()).compareTo(entry1.getValue());
 				}
 			});
 			for (Entry<String,Long> calcurateSortResult : calcurateSort) {
 				pw.println(calcurateSortResult.getKey() + "," + code.get(calcurateSortResult.getKey()) + ","+ calcurateSortResult.getValue());
 			}
-		}
-		finally{
+		}finally{
 			pw.close();
 		}
 
@@ -148,14 +145,12 @@ public class CalcurateSystem {
 					mapname.put(split[0] , split[1] );
 					valueName.put(split[0] , 0L);
 				}
-			}
-			finally{
+			}finally{
 				read.close();
 			}
 			return true;
-		}
 
-		catch(IOException e){
+		}catch(IOException e){
 			System.out.println(fName + "定義ファイルが存在しません");
 			return false;
 		}
@@ -191,7 +186,7 @@ public class CalcurateSystem {
 			rcdFile = new ArrayList<String>();
 
 			//売上ファイルが8桁以外であればエラーを表示する//
-			if(!splitName.matches("^\\d{8}$")) {
+			if(!splitName.matches("^\\d{8}$")){
 				System.out.println(filterFile + "のファイル名が8桁ではありません");
 				return false;
 			}
@@ -214,23 +209,20 @@ public class CalcurateSystem {
 				System.out.println(filterFile + "の商品コードが不正です");
 				return false;
 			}
-		}
-		catch(IOException e){
+		}catch(IOException e){
 			System.out.println("予期せぬエラーが発生しました");
 			return false;
-		}
-		finally{
+
+		}finally{
 			try {
 				rcdRead.close();
-			} catch (IOException e) {
+			}catch (IOException e){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
-			}
-			catch(IndexOutOfBoundsException e){
+			}catch(IndexOutOfBoundsException e){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
-			}
-			catch(NullPointerException e) {
+			}catch(NullPointerException e){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
 			}
